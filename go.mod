@@ -3,11 +3,11 @@ module github.com/gsmonni/ladapsvc
 go 1.21
 
 require (
-	github.com/agiledragon/gomonkey/v2 v2.10.1
+	github.com/agiledragon/gomonkey/v2 v2.11.0
 	github.com/ardanlabs/conf/v3 v3.1.7
 	github.com/go-ldap/ldap v3.0.3+incompatible
-	github.com/google/uuid v1.4.0
-	github.com/gorilla/mux v1.8.0
+	github.com/google/uuid v1.5.0
+	github.com/gorilla/mux v1.8.1
 	github.com/stretchr/testify v1.8.4
 )
 

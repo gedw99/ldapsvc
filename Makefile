@@ -2,10 +2,42 @@
 help: # Show help for each of the Makefile recipes.
 	@grep -E '^[a-zA-Z0-9 -]+:.*#'  Makefile | sort | while read -r l; do printf "\033[1;32m$$(echo $$l | cut -f 1 -d':')\033[00m:$$(echo $$l | cut -f 2- -d'#')\n"; done
 
+OS_GO_BIN_NAME=go
+ifeq ($(shell uname),Windows)
+	OS_GO_BIN_NAME=go.exe
+endif
+
+OS_GO_OS=$(shell $(OS_GO_BIN_NAME) env GOOS)
+# toggle to fake being windows..
+#OS_GO_OS=windows
+
 APP_NAME=ldapsvc
+
 BINARY_NAME=ldapsvc
+ifeq ($(shell uname),Windows)
+	BINARY_NAME=ldapsvc.exe
+endif
 BINARY_FOLDER=release
 VERSION=$(shell cat VERSION)
+
+print: # print make variables
+	@echo ""
+	@echo "OS_GO_BIN_NAME:    $(OS_GO_BIN_NAME)"
+	@echo "OS_GO_OS:          $(OS_GO_OS)"
+	@echo ""
+	@echo "BINARY_NAME:       $(BINARY_NAME)"
+	@echo "VERSION:           $(VERSION)"
+	@echo ""
+
+ci-build: # runs all needed make targets in CI. OS independent so can also be run from your laptop.
+	@echo ""
+	@echo "ci-build called ..."
+	$(MAKE) help
+	$(MAKE) print
+	$(MAKE) test
+	$(MAKE) build
+	@echo "ci-build finished ...
+	@echo ""
 
 build: clean # build  ldapsvc for local system
 	$(shell mkdir ${BINARY_FOLDER})
@@ -15,10 +47,10 @@ build-linux: clean test # build  ldapsvc for linux system
 	$(shell mkdir ${BINARY_FOLDER})
 	GOOS=linux go build -o ${BINARY_FOLDER}/${BINARY_NAME} ./cmd/main.go
 
-run: build # build and run  ldapsvc
+run: build # build and run ldapsvc
 	./${BINARY_FOLDER}/${BINARY_NAME}
 
-run-linux: build-linux # build and run  ldapsvc
+run-linux: build-linux # build and run ldapsvc
 	./${BINARY_FOLDER}/${BINARY_NAME}
 
 clean: # clean-up binary files

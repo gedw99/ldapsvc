@@ -34,16 +34,20 @@ ci-build: # runs all needed make targets in CI. OS independent so can also be ru
 	@echo "ci-build called ..."
 	$(MAKE) help
 	$(MAKE) print
+	$(MAKE) mod
 	$(MAKE) test
 	$(MAKE) build
 	@echo "ci-build finished ...
 	@echo ""
 
-build: clean # build  ldapsvc for local system
+mod: # go mod tidy
+	go mod tidy
+
+build: clean # build ldapsvc for local system
 	$(shell mkdir ${BINARY_FOLDER})
 	go build -o ${BINARY_FOLDER}/${BINARY_NAME} ./cmd/main.go
 
-build-linux: clean test # build  ldapsvc for linux system
+build-linux: clean test # build ldapsvc for linux system
 	$(shell mkdir ${BINARY_FOLDER})
 	GOOS=linux go build -o ${BINARY_FOLDER}/${BINARY_NAME} ./cmd/main.go
 

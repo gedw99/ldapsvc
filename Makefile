@@ -37,7 +37,7 @@ ci-build: # runs all needed make targets in CI. OS independent so can also be ru
 	$(MAKE) mod
 	$(MAKE) test
 	$(MAKE) build
-	@echo "ci-build finished ...
+	@echo "ci-build finished ..."
 	@echo ""
 
 mod: # go mod tidy
